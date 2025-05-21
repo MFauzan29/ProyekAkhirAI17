@@ -49,13 +49,13 @@ def show_sample():
 # =============================
 # 4. Definisi ANN
 # =============================
-from torchvision.models import resnet18
+from torchvision.models import resnet18, ResNet18_Weights
 
 class ResNetANN(nn.Module):
     def __init__(self):
         super(ResNetANN, self).__init__()
         
-        resnet = resnet18(pretrained=False)
+        resnet = resnet18(weights=None)
         self.feature_extractor = nn.Sequential(*list(resnet.children())[:-1])  # Tanpa layer FC terakhir
         
         # ANN custom (input 512 karena output dari ResNet terakhir adalah 512-dim)
@@ -141,8 +141,8 @@ def load_or_train_model():
     model_path = 'ResNetANN_model.pth'
 
     if os.path.exists(model_path):
-        print("Model lama tidak cocok dengan arsitektur baru. Training ulang model...")
-        os.remove(model_path)
+        print("Memuat model yang sudah dilatih sebelumnya...")
+        model.load_state_dict(torch.load(model_path))
     else:
         print("Model belum ada, melakukan training...")
         model = train_model()
