@@ -141,8 +141,8 @@ def load_or_train_model():
     model_path = 'ResNetANN_model.pth'
 
     if os.path.exists(model_path):
+        model.load_state_dict(torch.load(model_path, map_location=device))
         print("Memuat model yang sudah dilatih sebelumnya...")
-        model.load_state_dict(torch.load(model_path))
     else:
         print("Model belum ada, melakukan training...")
         model = train_model()
